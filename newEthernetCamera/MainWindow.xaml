@@ -1,0 +1,8 @@
+﻿<Window x:Class="newEthernetCamera.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Camera Feed" Height="480" Width="640">
+    <Grid>
+        <Image x:Name="imgFrame" Stretch="Uniform"/>
+    </Grid>
+</Window>
