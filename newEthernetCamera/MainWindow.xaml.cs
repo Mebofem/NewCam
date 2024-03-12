@@ -79,26 +79,47 @@ namespace newEthernetCamera
                 }
             });
         }
-
-
-
-
-
         protected override void OnClosed(EventArgs e)
         {
+            // Unsubscribe from the frame received event first
             if (_camera != null)
             {
-                _camera.StopContinuousImageAcquisition();
                 _camera.OnFrameReceived -= OnFrameReceived;
-                _camera.Close();
             }
 
-            if (_vimba != null)
+            Dispatcher.Invoke(() =>
             {
-                _vimba.Shutdown();
-            }
+                if (_camera != null)
+                {
+                    try
+                    {
+                        // Stop continuous image acquisition
+                        _camera.StopContinuousImageAcquisition();
+                        // Close the camera
+                        _camera.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error closing the camera: " + ex.Message);
+                    }
+                }
 
-            base.OnClosed(e);
+                if (_vimba != null)
+                {
+                    try
+                    {
+                        // Shutdown Vimba API
+                        _vimba.Shutdown();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error shutting down Vimba: " + ex.Message);
+                    }
+                }
+
+                base.OnClosed(e);
+            });
         }
+
     }
 }
